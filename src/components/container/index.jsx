@@ -3,6 +3,7 @@ import Statistics from "../statistics";
 import FeedbackOptions from "../feedback";
 import Section from "../section";
 import Notification from "../message";
+import PropTypes from "prop-types"
 
 
 class Container extends React.Component{
@@ -13,6 +14,17 @@ class Container extends React.Component{
         
 
     }
+
+    static propTypes={
+            state:PropTypes.shape({
+                good: PropTypes.number,
+                neutral: PropTypes.number,
+                bad: PropTypes.number,
+                total:PropTypes.number,
+                positivePercentage:PropTypes.string
+            })
+    }
+
     onLeaveFeedback=(e)=>{
         if(e.target.value==="good"){
             this.goodPoint();
