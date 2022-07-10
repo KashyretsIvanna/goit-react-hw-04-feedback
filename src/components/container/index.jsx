@@ -1,81 +1,47 @@
-import React from "react";
-import Statistics from "../statistics";
-import FeedbackOptions from "../feedback";
-import Section from "../section";
-import Notification from "../message";
-import PropTypes from "prop-types"
+import React from 'react';
+import Statistics from '../statistics';
+import FeedbackOptions from '../feedback';
+import Section from '../section';
+import Notification from '../message';
+import PropTypes from 'prop-types';
 
+class Container extends React.Component {
+  static propTypes = {
+    state: PropTypes.shape({
+      good: PropTypes.number.isRequired,
+      neutral: PropTypes.number.isRequired,
+      bad: PropTypes.number.isRequired,
+    }).isRequired,
+    onLeaveFeedback: PropTypes.func.isRequired,
+    onTotalPoint: PropTypes.func.isRequired,
+  };
 
-class Container extends React.Component{
-    
-    constructor({state}){
-        super();
-        this.state=state;
-        
+  render() {
+    const { good, neutral, bad } = this.props.state;
+    const { onTotalPoint } = this.props;
 
-    }
-
-    static propTypes={
-            state:PropTypes.shape({
-                good: PropTypes.number,
-                neutral: PropTypes.number,
-                bad: PropTypes.number,
-                total:PropTypes.number,
-                positivePercentage:PropTypes.string
-            })
-    }
-
-    onLeaveFeedback=(e)=>{
-        if(e.target.value==="good"){
-            this.goodPoint();
-        }else if(e.target.value==="neutral"){
-            this.neutralPoint();
-        }else if(e.target.value==="bad"){
-            this.badPoint();
-        }
-          
-    };
-
-    totalPoint=()=>{
-        this.countTotalFeedback();
-        this.countPositiveFeedbackPercentage();
-    };
-    countTotalFeedback=()=>{
-        this.setState(prevState=>({total:prevState.good+prevState.neutral+prevState.bad}))
-    }
-    countPositiveFeedbackPercentage=()=>{
-        this.setState(prevState=>({positivePercentage:prevState.good/(prevState.good+prevState.neutral+prevState.bad)*100+"%"}));
-        
-    }
-  
-    goodPoint=()=>{
-        this.setState(prevState=>({good:prevState.good+1}));
-        this.totalPoint();
-    };
-    neutralPoint=()=>{
-        this.setState(prevState=>({neutral:prevState.neutral+1}));
-        this.totalPoint();
-    };
-    badPoint=()=>{
-        this.setState(prevState=>({bad:prevState.bad+1}));
-        this.totalPoint();
-    };
-
-    render(){
-        const {good,neutral,bad,total,positivePercentage} =this.state;
-        // добавити options
-        
-        return(
-            <Section title="Please leave feedback">
-                <FeedbackOptions onLeaveFeedback={this.onLeaveFeedback}/>
-                <h2>Statistics</h2>
-                {this.state.good===0 && this.state.bad===0 && this.state.neutral===0?<Notification message="There is no feedback"/>:<Statistics good={good} neutral={neutral} bad={bad} total={total} positivePercentage={positivePercentage}/>}
-            </Section>
-            
-        );
-    }
-
-    
-};
+    return (
+      <Section title="Please leave feedback">
+        <FeedbackOptions
+          options={Object.keys(this.props.state)}
+          onLeaveFeedback={this.props.onLeaveFeedback}
+        />
+        <h2>Statistics</h2>
+        {this.props.state.good === 0 &&
+        this.props.state.bad === 0 &&
+        this.props.state.neutral === 0 ? (
+          <Notification message="There is no feedback" />
+        ) : (
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            onTotalPoint={onTotalPoint}
+          />
+        )}
+      </Section>
+    );
+  }
+}
 
 export default Container;

@@ -1,20 +1,27 @@
-import { Fragment } from "react";
+import { Component } from 'react';
+import { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-const Statistics=({good,neutral,bad,total,positivePercentage})=>{
-    return(
-        <Fragment>
-            {
-                (good!==0 && neutral!==0 && bad!==0)
-            }
-            <div>good:{good}</div>           
-            <div>neutral:{neutral}</div>
-            <div>bad:{bad}</div>
-            <div>total:{total}</div>
-            <div>positivePercentage:{positivePercentage}</div>
-            
-        </Fragment>
-        
+class Statistics extends Component {
+  static propTypes = {
+    good: PropTypes.number.isRequired,
+    neutral: PropTypes.number.isRequired,
+    bad: PropTypes.number.isRequired,
+    onTotalPoint: PropTypes.func.isRequired,
+  };
+
+  render() {
+    const { good, neutral, bad, onTotalPoint } = this.props;
+    return (
+      <Fragment>
+        <div>good:{good}</div>
+        <div>neutral:{neutral}</div>
+        <div>bad:{bad}</div>
+        <div>total:{onTotalPoint().total}</div>
+        <div>positivePercentage:{onTotalPoint().positivePercentage}</div>
+      </Fragment>
     );
-};
+  }
+}
 
 export default Statistics;
