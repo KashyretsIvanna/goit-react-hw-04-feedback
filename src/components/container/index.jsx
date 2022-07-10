@@ -11,7 +11,7 @@ class Container extends React.Component {
       good: PropTypes.number.isRequired,
       neutral: PropTypes.number.isRequired,
       bad: PropTypes.number.isRequired,
-    }).isRequired,
+    }),
     onLeaveFeedback: PropTypes.func.isRequired,
     onTotalPoint: PropTypes.func.isRequired,
   };
