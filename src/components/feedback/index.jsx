@@ -1,32 +1,29 @@
 import { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Component } from 'react';
 
-class FeedbackOptions extends Component {
-  static propTypes = {
-    onLeaveFeedback: PropTypes.func.isRequired,
-    options: PropTypes.array.isRequired,
-  };
+const FeedbackOptions = props => {
+	return (
+		<Fragment>
+			{props.options.map(el => {
+				return (
+					<button
+						key={el}
+						onClick={e => {
+							props.onLeaveFeedback(e);
+						}}
+						value={el}
+					>
+						{el}
+					</button>
+				);
+			})}
+		</Fragment>
+	);
+};
 
-  render() {
-    return (
-      <Fragment>
-        {this.props.options.map(el => {
-          return (
-            <button
-              key={el}
-              onClick={e => {
-                this.props.onLeaveFeedback(e);
-              }}
-              value={el}
-            >
-              {el}
-            </button>
-          );
-        })}
-      </Fragment>
-    );
-  }
-}
+FeedbackOptions.propTypes = {
+	onLeaveFeedback: PropTypes.func.isRequired,
+	options: PropTypes.array.isRequired,
+};
 
 export default FeedbackOptions;

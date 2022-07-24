@@ -1,49 +1,47 @@
-import { Component } from 'react';
 import './App.css';
 import Container from './components/container';
+import { useState } from 'react';
 
 const stateInfo = {
-  good: 0,
-  neutral: 0,
-  bad: 0,
+	good: 0,
+	neutral: 0,
+	bad: 0,
 };
 
-class App extends Component {
-  state = {
-    ...stateInfo,
-  };
+const App = () => {
+	const [good, setGood] = useState(stateInfo.good);
+	const [neutral, setNeutral] = useState(stateInfo.neutral);
+	const [bad, setBad] = useState(stateInfo.bad);
 
-  handleLeaveFeedback = e => {
-    this.handleSetPoint(e.target.value);
-  };
+	const handleLeaveFeedback = e => {
+		if (e.target.value === 'good') {
+			setGood(good => good + 1);
+		} else if (e.target.value === 'neutral') {
+			setNeutral(neutral => neutral + 1);
+		} else if (e.target.value === 'bad') {
+			setBad(bad => bad + 1);
+		}
+	};
 
-  handleTotalPoint = () => {
-    return {
-      total: this.state.good + this.state.neutral + this.state.bad,
-      positivePercentage:
-        Math.round(
-          (this.state.good /
-            (this.state.good + this.state.neutral + this.state.bad)) *
-            100
-        ) + '%',
-    };
-  };
+	const handleTotalPoint = () => {
+		return {
+			total: good + neutral + bad,
+			positivePercentage:
+				Math.round((good / (good + neutral + bad)) * 100) + '%',
+		};
+	};
 
-  handleSetPoint = value => {
-    this.setState(prevState => ({ [value]: prevState[value] + 1 }));
-  };
-
-  render() {
-    return (
-      <div className="App">
-        <Container
-          onLeaveFeedback={this.handleLeaveFeedback}
-          state={this.state}
-          onTotalPoint={this.handleTotalPoint}
-        />
-      </div>
-    );
-  }
-}
+	return (
+		<div className="App">
+			<Container
+				onLeaveFeedback={handleLeaveFeedback}
+				good={good}
+				neutral={neutral}
+				bad={bad}
+				onTotalPoint={handleTotalPoint}
+			/>
+		</div>
+	);
+};
 
 export default App;
